@@ -1,14 +1,22 @@
 function show_random_field();
+    N=10;
     [x,y]=meshgrid(-10:0.1:10);
-    x0=-1;
-    y0=2;
-    Wind=[3,0];
+    x0=(rand(1,N)-0.5)*10;
+    y0=(rand(1,N)-0.5)*10;
+    Wind=[3,2];
     
     parameters.wake=x*0+1;
     parameters.x=x;
     parameters.y=y;
-    alpha=0;
-    [Pout,wake_attenuation]=WTmodel(x0,y0,alpha,Wind,parameters);
+    alpha=(rand(1,N)-0.5)*20;
+    global_wake_attn=parameters.wake*0;
+    for i=1:N
+    [~,wake_attenuation]=WTmodel(x0(i),y0(i),alpha(i),Wind,parameters);
+    global_wake_attn=global_wake_attn+wake_attenuation;
+    end
+    global_wake_attn(global_wake_attn>1)=1;
+    parameters.wake=1-global_wake_attn;
     
-    Pout
-    surf(x,y,wake_attenuation);shading interp;view(0,90)
+    
+    
+    surf(x,y,parameters.wake);shading interp;view(0,90)

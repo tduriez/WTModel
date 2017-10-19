@@ -28,6 +28,6 @@ Pout=rW*Crossection*Attenuation;
 zoneI=((theta>thetaW+(alpha/180*pi)/2-10/180*pi) & (theta<thetaW+(alpha/180*pi)/2+10/180*pi)) & rho < 2;
 zoneII=((theta>thetaW+(alpha/180*pi)/2-20/180*pi) & (theta<thetaW+(alpha/180*pi)/2+20/180*pi)) & rho < 5;
 %keyboard
-wake_attenuation=ones(size(parameters.x))-zoneI*.25-zoneII*.25;
+wake_attenuation=zoneI*.25+zoneII*.25;
 
 
