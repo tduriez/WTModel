@@ -1,4 +1,4 @@
-function [Pout,wake_attenuation]=WTmodel(x0,y0,alpha,Wind,parameters)
+function [Pout,wind_mod,alpha,section]=WTmodel(i0,j0,ControlLaw,Wind,parameters)
 %WTmodel simulates the output of a single WT, in term of output Power and
 %impact in the wake.
 %
@@ -11,8 +11,13 @@ function [Pout,wake_attenuation]=WTmodel(x0,y0,alpha,Wind,parameters)
 %% Pout calculation
 % first order model Pout is proportional to feeled wind strength times the crosssection;
 [thetaW,rW]=cart2pol(Wind(1),Wind(2));
-Crossection=cos(alpha/180*pi);
-Attenuation=griddata(parameters.x,parameters.y,parameters.wake,x0,y0);
+if ~isempty(ControlLaw);
+    alpha=ControlLaw(i0,j0,Wind,parameters);
+else
+    alpha=0;
+end
+Crossection=cos(thetaW-alpha);
+Attenuation=parameters.wake(i0,j0);
 Pout=rW*Crossection*Attenuation;
 
 %% Wake attenuation calculation
@@ -24,10 +29,13 @@ Pout=rW*Crossection*Attenuation;
 % center of the wake is Wind direction + alpha/2
 
 % Zone I calculation
-[theta,rho]=cart2pol(parameters.x-x0,parameters.y-y0);
-zoneI=((theta>thetaW+(alpha/180*pi)/2-10/180*pi) & (theta<thetaW+(alpha/180*pi)/2+10/180*pi)) & rho < 2;
-zoneII=((theta>thetaW+(alpha/180*pi)/2-20/180*pi) & (theta<thetaW+(alpha/180*pi)/2+20/180*pi)) & rho < 5;
-%keyboard
-wake_attenuation=zoneI*.25+zoneII*.25;
+[theta,rho]=cart2pol(parameters.x-parameters.x(i0,1),parameters.y-parameters.y(1,j0));
+[sx,sy]=pol2cart([alpha+pi/2,alpha-pi/2],[1 1]);
+section=[sx;sy]+[parameters.x(i0,1),parameters.x(i0,1);parameters.y(1,j0),parameters.y(1,j0)];
+
+centerWakeTheta=(2*thetaW+alpha)/3;
+
+angle_attn=exp(-(theta-centerWakeTheta).*(theta-centerWakeTheta)/(0.1));
+wind_mod=1-(angle_attn.*exp(-rho.*rho/(rW*rW)/10)*0.75).*(rho>0);%+zoneII*.25;
 
 
