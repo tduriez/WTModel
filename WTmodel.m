@@ -12,7 +12,7 @@ function [Pout,wind_mod,alpha,section]=WTmodel(i0,j0,ControlLaw,Wind,parameters)
 % first order model Pout is proportional to feeled wind strength times the crosssection;
 [thetaW,rW]=cart2pol(Wind(1),Wind(2));
 if ~isempty(ControlLaw);
-    alpha=ControlLaw(i0,j0,Wind,parameters);
+    alpha=ControlLaw(thetaW,rW);
 else
     alpha=0;
 end
