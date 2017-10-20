@@ -13,6 +13,10 @@ function [Pout,wind_mod,alpha,section]=WTmodel(i0,j0,ControlLaw,Wind,parameters)
 [thetaW,rW]=cart2pol(Wind(1),Wind(2));
 if ~isempty(ControlLaw);
     alpha=ControlLaw(thetaW,rW);
+    alpha=max(alpha,-pi/2);
+    alpha=min(alpha,pi/2);
+    
+    
 else
     alpha=0;
 end

@@ -103,7 +103,8 @@ for it=1:length(t)
         P(it,i)=Pout;
         sec=[sec,[NaN;NaN],section];
     end
-    J=sum(trapz(t,P));
+    P(P<0)=0;
+    J=1/(sum(trapz(t,P)));
     if figs
         subplot(3,1,[1 2])
         %surf(x,y,x*0,parameters.wake);shading interp;view(0,90);hold on

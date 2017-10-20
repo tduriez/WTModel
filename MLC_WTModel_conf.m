@@ -1,6 +1,6 @@
 
 
-        parameters.size=100;
+        parameters.size=50;
         parameters.sensors=2;
         parameters.sensor_spec=0;
         parameters.controls=1;
@@ -60,7 +60,7 @@
         parameters.preevaluation=0;
         parameters.preev_function='';
         parameters.problem_variables.gamma=0.1;
-        t=0:0.01:1;
+        t=0:0.01:.1;
         Wind_angle=build_random_coherent_noise(t,10,5/180*pi);
         Wind_force=abs(3+build_random_coherent_noise(t,20,0.3));
         parameters.problem_variables.Wind_angle= Wind_angle;
