@@ -1,4 +1,4 @@
-function [J,P]=Evaluate_WT(idv,mlc_parameters,~,figs)
+function [J,P]=Evaluate_WT_N(idv,mlc_parameters,~,figs)
 
 if nargin<4
     figs=0;
@@ -80,15 +80,16 @@ P=zeros(length(t),N);
 
 % S0: Wind angle
 % S1: Wind strength
-
-ControlLaw=eval(sprintf('@(S0,S1)(%s);',idv.formal));
+for i=1:length(idv.formal)
+    ControlLaw{i}=eval(sprintf('@(S0,S1)(%s);',idv.formal{i}));
+end
 
 
 for it=1:length(t)
     parameters.wake=x*0+1;
-    [~,wind_mod]=WTmodel(i0(1),j0(1),ControlLaw,Wind(:,it),parameters);
+    [~,wind_mod]=WTmodel(i0(1),j0(1),ControlLaw{1},Wind(:,it),parameters);
     for i=2:N
-        [~,wake_attenuation]=WTmodel(i0(i),j0(i),ControlLaw,Wind(:,it),parameters);
+        [~,wake_attenuation]=WTmodel(i0(i),j0(i),ControlLaw{i},Wind(:,it),parameters);
         wind_mod=wind_mod.*wake_attenuation;
     end
     
@@ -99,7 +100,7 @@ for it=1:length(t)
     parameters.wake=wind_mod;
     sec=[];
     for i=1:N
-        [Pout,~,~,section]=WTmodel(i0(i),j0(i),ControlLaw,Wind(:,it),parameters);
+        [Pout,~,~,section]=WTmodel(i0(i),j0(i),ControlLaw{i},Wind(:,it),parameters);
         P(it,i)=Pout;
         sec=[sec,[NaN;NaN],section];
     end

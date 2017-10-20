@@ -25,12 +25,7 @@ Attenuation=parameters.wake(i0,j0);
 Pout=rW*Crossection*Attenuation;
 
 %% Wake attenuation calculation
-% 3 zones model
-% zone I in the center of the wake: 50% attenuation
-% zone II 25% attenuation
-% zone III 0% attenuation
-%
-% center of the wake is Wind direction + alpha/2
+
 
 % Zone I calculation
 [theta,rho]=cart2pol(parameters.x-parameters.x(i0,1),parameters.y-parameters.y(1,j0));
