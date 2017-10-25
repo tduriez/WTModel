@@ -1,6 +1,6 @@
 
 
-        parameters.size=100;
+        parameters.size=50;
         parameters.sensors=2;
         parameters.sensor_spec=0;
         parameters.controls=9;
@@ -8,7 +8,7 @@
         parameters.leaf_prob=0.3;
         parameters.range=10;
         parameters.precision=4;
-        parameters.opsetrange=1:3; 
+        parameters.opsetrange=[1:3 9]; 
         parameters.formal=1;
         parameters.end_character='';
         parameters.individual_type='tree';
@@ -19,12 +19,7 @@
         parameters.maxdepthfirst=5;
         parameters.mindepth=2;
         parameters.mutmindepth=2;
-        parameters.mutmaxdepth=15;% 3 zones model
-% zone I in the center of the wake: 50% attenuation
-% zone II 25% attenuation
-% zone III 0% attenuation
-%
-% center of the wake is Wind direction + alpha/2
+        parameters.mutmaxdepth=15;
         parameters.mutsubtreemindepth=2;
         parameters.generation_method='mixed_ramped_gauss';
         parameters.gaussigma=3;
@@ -65,9 +60,9 @@
         parameters.preevaluation=0;
         parameters.preev_function='';
         parameters.problem_variables.gamma=0.1;
-        t=0:0.01:.1;
+        t=0:0.01:1;
         Wind_angle=build_random_coherent_noise(t,10,5/180*pi);
-        Wind_force=abs(3+build_random_coherent_noise(t,20,0.3));
+        Wind_force=abs(10+build_random_coherent_noise(t,20,0.3));
         parameters.problem_variables.Wind_angle= Wind_angle;
         parameters.problem_variables.Wind_force= Wind_force;
         parameters.problem_variables.N=parameters.controls;
